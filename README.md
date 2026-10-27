@@ -8,6 +8,13 @@ Curated AI updates. Forever free. Supported by product advertisements.
 
 ---
 
+## Latest Issue
+
+**[Issue #001 — October 27, 2026](issues/001.md)**  
+Anthropic S-1 filing, OpenAI GPT-6.1 Terra price cut, security concerns, and major compute financing.
+
+---
+
 ## What this is
 
 A clean, no-nonsense AI news newsletter.
@@ -23,23 +30,8 @@ No paywalls. No premium tiers. No spam.
 
 ## Sign up (Free)
 
-**Coming online shortly.**  
-In the meantime, star this repository and watch for the first issue.
-
-You will be able to subscribe with just your email. No account required.
-
----
-
-## What you’ll get
-
-Every issue includes:
-
-- Top AI developments of the period
-- Practical takeaways (what it actually means for builders & users)
-- One or two carefully selected product advertisements (clearly marked)
-- Links to primary sources
-
-Frequency target: **Weekly** (or when there is genuinely important news).
+Star this repository to follow new issues.  
+Email signup will be added shortly.
 
 ---
 
@@ -58,18 +50,12 @@ This keeps the newsletter free for readers while remaining sustainable.
 
 ```
 NEWS/
-├── issues/           # Past newsletter issues (Markdown)
+├── issues/           # Published newsletter issues
 ├── templates/        # Issue templates
-├── ads/              # Ad guidelines & rate card (when ready)
-├── website/          # Simple landing page (GitHub Pages ready)
+├── ads/              # Ad guidelines
+├── website/          # Landing page
 └── README.md
 ```
-
----
-
-## First issue
-
-See [`issues/001.md`](issues/001.md) for the starter template and structure.
 
 ---
 
