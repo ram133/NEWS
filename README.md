@@ -49,9 +49,19 @@ Only your email address is stored. You can unsubscribe anytime by opening anothe
 
 ## Import subscribers (for maintainer)
 
-You can bulk-import emails into the JSON database with the included script.
+You can bulk-import emails into the JSON database in two ways.
 
-### Quick start
+### Option 1 — GitHub Action (recommended)
+
+1. Go to the **Actions** tab → **Import Subscribers** → **Run workflow**
+2. Paste emails (one per line) into the input box  
+   **or** put them in `data/pending_import.txt` and leave the “use pending file” option enabled
+3. Optionally check **dry-run** to preview without writing
+4. Click **Run workflow**
+
+The Action will validate, deduplicate, update `data/subscribers.json`, and commit the change automatically.
+
+### Option 2 — Local script
 
 ```bash
 # From a plain text file (one email per line)
@@ -69,13 +79,11 @@ python scripts/import_subscribers.py emails.txt --dry-run
 
 See `data/import_example.txt` for a ready-to-use sample file.
 
-The script automatically:
-- Validates basic email format
-- Deduplicates (case-insensitive)
-- Keeps existing subscribers
-- Updates the `updated` date in the JSON
-
-After running, commit the updated `data/subscribers.json`.
+Both methods:
+- Validate basic email format
+- Deduplicate (case-insensitive)
+- Keep existing subscribers
+- Update the `updated` date in the JSON
 
 ---
 
@@ -94,15 +102,18 @@ This keeps the newsletter free for readers while remaining sustainable.
 
 ```
 NEWS/
+├── .github/workflows/
+│   └── import-subscribers.yml   # GitHub Action for bulk import
 ├── data/
-│   ├── subscribers.json     # JSON database of email subscriptions
-│   └── import_example.txt   # Sample file for bulk import
+│   ├── subscribers.json         # JSON database of email subscriptions
+│   ├── pending_import.txt       # Drop emails here for the Action
+│   └── import_example.txt       # Sample file for bulk import
 ├── scripts/
-│   └── import_subscribers.py  # Import tool
-├── issues/                  # Published newsletter issues
-├── templates/               # Issue templates
-├── ads/                     # Ad guidelines
-├── website/                 # Landing page
+│   └── import_subscribers.py    # Local import tool
+├── issues/                      # Published newsletter issues
+├── templates/                   # Issue templates
+├── ads/                         # Ad guidelines
+├── website/                     # Landing page
 └── README.md
 ```
 
