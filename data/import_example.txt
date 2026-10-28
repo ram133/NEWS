@@ -1,0 +1,12 @@
+# Example list of emails to import
+# One email per line. Lines starting with # are ignored.
+#
+# Usage:
+#   python scripts/import_subscribers.py data/import_example.txt
+#
+# Or with dry-run first:
+#   python scripts/import_subscribers.py data/import_example.txt --dry-run
+
+alice@example.com
+bob@example.com
+carol@example.org
