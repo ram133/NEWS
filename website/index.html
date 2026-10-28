@@ -11,6 +11,7 @@
       --muted: #a0a0a0;
       --accent: #3b82f6;
       --card: #1a1a1a;
+      --input-bg: #252525;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -52,8 +53,37 @@
       border-radius: 8px;
       font-weight: 600;
       margin-top: 1rem;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
     }
     .cta:hover { opacity: 0.9; text-decoration: none; }
+    .signup-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .signup-form input[type="email"] {
+      background: var(--input-bg);
+      border: 1px solid #333;
+      color: var(--text);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      width: 100%;
+    }
+    .signup-form input[type="email"]:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .signup-form button {
+      width: 100%;
+    }
+    .form-note {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
     footer { margin-top: 3rem; color: var(--muted); font-size: 0.9rem; }
   </style>
 </head>
@@ -74,8 +104,21 @@
 
   <div class="card">
     <h2 style="margin-bottom: 0.75rem;">Subscribe</h2>
-    <p style="color: var(--muted); margin-bottom: 1rem;">Email signup will go live with the first issue. For now, star the repository to follow progress.</p>
-    <a class="cta" href="https://github.com/ram133/NEWS" target="_blank">View on GitHub →</a>
+    <p style="color: var(--muted); margin-bottom: 1rem;">Enter your email to get new issues. No name, no spam — just the newsletter.</p>
+    <form class="signup-form" action="https://formsubmit.co/3659745@gmail.com" method="POST">
+      <input type="email" name="email" required placeholder="you@example.com" autocomplete="email">
+      <!-- FormSubmit options: only email is collected -->
+      <input type="hidden" name="_subject" value="NEWS newsletter signup">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+      <button type="submit" class="cta">Subscribe free →</button>
+    </form>
+    <p class="form-note">Only your email address is collected. You can unsubscribe anytime by replying to any issue.</p>
+  </div>
+
+  <div class="card">
+    <p style="color: var(--muted); margin-bottom: 0.5rem;">Prefer to follow on GitHub?</p>
+    <a class="cta" href="https://github.com/ram133/NEWS" target="_blank" rel="noopener">View on GitHub →</a>
   </div>
 
   <footer>
