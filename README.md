@@ -30,8 +30,12 @@ No paywalls. No premium tiers. No spam.
 
 ## Sign up (Free)
 
-Star this repository to follow new issues.  
-Email signup will be added shortly.
+**Email signup is live** on the [landing page](website/index.html).
+
+Only your email address is collected — nothing else.  
+New signups are delivered to the owner so the list can be imported into any email tool.
+
+You can also star this repository to follow new issues on GitHub.
 
 ---
 
@@ -53,7 +57,7 @@ NEWS/
 ├── issues/           # Published newsletter issues
 ├── templates/        # Issue templates
 ├── ads/              # Ad guidelines
-├── website/          # Landing page
+├── website/          # Landing page + email signup form
 └── README.md
 ```
 
