@@ -47,6 +47,38 @@ Only your email address is stored. You can unsubscribe anytime by opening anothe
 
 ---
 
+## Import subscribers (for maintainer)
+
+You can bulk-import emails into the JSON database with the included script.
+
+### Quick start
+
+```bash
+# From a plain text file (one email per line)
+python scripts/import_subscribers.py emails.txt
+
+# From a CSV (first column = email)
+python scripts/import_subscribers.py emails.csv --csv
+
+# Directly on the command line
+python scripts/import_subscribers.py --emails user1@example.com user2@example.com
+
+# Preview first (no changes written)
+python scripts/import_subscribers.py emails.txt --dry-run
+```
+
+See `data/import_example.txt` for a ready-to-use sample file.
+
+The script automatically:
+- Validates basic email format
+- Deduplicates (case-insensitive)
+- Keeps existing subscribers
+- Updates the `updated` date in the JSON
+
+After running, commit the updated `data/subscribers.json`.
+
+---
+
 ## Advertisement policy
 
 - Only relevant AI / developer / productivity tools
@@ -63,11 +95,14 @@ This keeps the newsletter free for readers while remaining sustainable.
 ```
 NEWS/
 ├── data/
-│   └── subscribers.json   # JSON database of email subscriptions
-├── issues/                # Published newsletter issues
-├── templates/             # Issue templates
-├── ads/                   # Ad guidelines
-├── website/               # Landing page
+│   ├── subscribers.json     # JSON database of email subscriptions
+│   └── import_example.txt   # Sample file for bulk import
+├── scripts/
+│   └── import_subscribers.py  # Import tool
+├── issues/                  # Published newsletter issues
+├── templates/               # Issue templates
+├── ads/                     # Ad guidelines
+├── website/                 # Landing page
 └── README.md
 ```
 
