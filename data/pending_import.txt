@@ -1,0 +1,11 @@
+# Pending emails for import via GitHub Action
+# One email per line. Lines starting with # are ignored.
+#
+# How to use:
+# 1. Add emails below
+# 2. Commit & push this file
+# 3. Go to Actions → "Import Subscribers" → Run workflow
+#    (or it will be picked up if you enable the pending-file option)
+#
+# After a successful import the file is automatically cleared.
+
