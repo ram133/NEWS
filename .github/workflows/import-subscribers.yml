@@ -1,0 +1,111 @@
+name: Import Subscribers
+
+on:
+  # Manual run from the Actions tab
+  workflow_dispatch:
+    inputs:
+      emails:
+        description: "Emails to import (one per line)"
+        required: false
+        type: string
+      use_pending_file:
+        description: "Also process data/pending_import.txt if it exists"
+        required: false
+        type: boolean
+        default: true
+      dry_run:
+        description: "Dry-run only (do not commit changes)"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Prepare email list
+        id: prepare
+        run: |
+          mkdir -p /tmp/import
+          > /tmp/import/emails.txt
+
+          # From workflow input
+          if [ -n "${{ inputs.emails }}" ]; then
+            echo "${{ inputs.emails }}" >> /tmp/import/emails.txt
+          fi
+
+          # From pending file if requested and present
+          if [ "${{ inputs.use_pending_file }}" = "true" ] && [ -f data/pending_import.txt ]; then
+            echo "Found data/pending_import.txt — including it"
+            cat data/pending_import.txt >> /tmp/import/emails.txt
+          fi
+
+          # Count non-empty, non-comment lines
+          COUNT=$(grep -v '^#' /tmp/import/emails.txt | grep -c '[^[:space:]]' || true)
+          echo "Prepared $COUNT candidate line(s)"
+          echo "count=$COUNT" >> $GITHUB_OUTPUT
+
+      - name: Run import script
+        id: import
+        run: |
+          if [ "${{ steps.prepare.outputs.count }}" = "0" ]; then
+            echo "No emails provided. Nothing to do."
+            echo "added=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          DRY_FLAG=""
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            DRY_FLAG="--dry-run"
+            echo "Running in dry-run mode"
+          fi
+
+          python scripts/import_subscribers.py /tmp/import/emails.txt $DRY_FLAG
+
+          # Detect whether the JSON actually changed
+          if git diff --quiet data/subscribers.json; then
+            echo "added=0" >> $GITHUB_OUTPUT
+          else
+            echo "added=1" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit updated subscribers.json
+        if: steps.import.outputs.added == '1' && inputs.dry_run != true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/subscribers.json
+
+          # Optionally clear the pending file after successful import
+          if [ -f data/pending_import.txt ]; then
+            echo "# Pending import file — cleared after successful import on $(date -u +%Y-%m-%d)" > data/pending_import.txt
+            git add data/pending_import.txt
+          fi
+
+          git commit -m "Import new newsletter subscribers via GitHub Action
+
+          Triggered by: ${{ github.actor }}"
+          git push
+
+      - name: Summary
+        run: |
+          echo "### Import Subscribers Result" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            echo "- Mode: **dry-run** (no changes committed)" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.import.outputs.added }}" = "1" ]; then
+            echo "- Status: **subscribers.json updated and committed**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- Status: No new valid emails to add" >> $GITHUB_STEP_SUMMARY
+          fi
