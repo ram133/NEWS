@@ -58,33 +58,18 @@
       font-size: 1rem;
     }
     .cta:hover { opacity: 0.9; text-decoration: none; }
-    .signup-form {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-    .signup-form input[type="email"] {
-      background: var(--input-bg);
-      border: 1px solid #333;
-      color: var(--text);
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      font-size: 1rem;
-      width: 100%;
-    }
-    .signup-form input[type="email"]:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-    .signup-form button {
-      width: 100%;
-    }
     .form-note {
       font-size: 0.85rem;
       color: var(--muted);
       margin-top: 0.5rem;
     }
     footer { margin-top: 3rem; color: var(--muted); font-size: 0.9rem; }
+    code {
+      background: #252525;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
   </style>
 </head>
 <body>
@@ -103,17 +88,23 @@
   </div>
 
   <div class="card">
-    <h2 style="margin-bottom: 0.75rem;">Subscribe</h2>
-    <p style="color: var(--muted); margin-bottom: 1rem;">Enter your email to get new issues. No name, no spam — just the newsletter.</p>
-    <form class="signup-form" action="https://formsubmit.co/3659745@gmail.com" method="POST">
-      <input type="email" name="email" required placeholder="you@example.com" autocomplete="email">
-      <!-- FormSubmit options: only email is collected -->
-      <input type="hidden" name="_subject" value="NEWS newsletter signup">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_template" value="table">
-      <button type="submit" class="cta">Subscribe free →</button>
-    </form>
-    <p class="form-note">Only your email address is collected. You can unsubscribe anytime by replying to any issue.</p>
+    <h2 style="margin-bottom: 0.75rem;">Subscribe (GitHub only)</h2>
+    <p style="color: var(--muted); margin-bottom: 1rem;">
+      This project uses <strong>only GitHub</strong>. No external form services or third-party databases.
+    </p>
+    <p style="color: var(--muted); margin-bottom: 1rem;">
+      Email subscriptions are stored in a simple JSON file inside this repository:
+      <code>data/subscribers.json</code>
+    </p>
+    <p style="margin-bottom: 1rem;">To subscribe:</p>
+    <ul>
+      <li>Open a new <a href="https://github.com/ram133/NEWS/issues/new?title=Subscribe&body=Email%3A%20%0A%0A(please%20include%20your%20email%20address)" target="_blank" rel="noopener">GitHub Issue</a> with the title <strong>Subscribe</strong> and include your email in the body.</li>
+      <li>Or star / watch this repository to receive GitHub notifications when new issues are published.</li>
+    </ul>
+    <p class="form-note">
+      Your email will be added to <code>data/subscribers.json</code> by the maintainer. You can unsubscribe anytime by opening another issue or replying to a newsletter.
+    </p>
+    <a class="cta" href="https://github.com/ram133/NEWS/issues/new?title=Subscribe&body=Email%3A%20%0A%0A(please%20include%20your%20email%20address)" target="_blank" rel="noopener">Open Subscribe Issue →</a>
   </div>
 
   <div class="card">
@@ -123,7 +114,8 @@
 
   <footer>
     Independent project. Built with Grok.<br>
-    Not affiliated with xAI.
+    Not affiliated with xAI.<br>
+    All data and infrastructure stay on GitHub.
   </footer>
 </body>
 </html>
