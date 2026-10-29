@@ -1,0 +1,43 @@
+name: Daily AI News Publisher
+
+on:
+  schedule:
+    # 6:00 AM ChST (Guam) = 20:00 UTC previous day
+    - cron: '0 20 * * *'
+  workflow_dispatch:  # Allow manual runs from the Actions tab
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate daily issue
+        id: generate
+        run: |
+          python scripts/generate_daily_issue.py
+
+      - name: Commit and push if new issue created
+        run: |
+          git config user.name "NEWS Bot"
+          git config user.email "news-bot@users.noreply.github.com"
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git add issues/
+            git add data/last_run.json || true
+            git commit -m "Daily AI News — $(date -u +%Y-%m-%d)"
+            git push
+            echo "Published new issue"
+          else
+            echo "No new issue to publish today"
+          fi
