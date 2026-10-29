@@ -4,7 +4,7 @@ on:
   schedule:
     # 6:00 AM ChST (Guam) = 20:00 UTC previous day
     - cron: '0 20 * * *'
-  workflow_dispatch:  # Allow manual runs from the Actions tab
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -27,17 +27,54 @@ jobs:
         run: |
           python scripts/generate_daily_issue.py
 
-      - name: Commit and push if new issue created
+      - name: Commit and push markdown issue
+        id: commit
         run: |
           git config user.name "NEWS Bot"
           git config user.email "news-bot@users.noreply.github.com"
 
           if [ -n "$(git status --porcelain)" ]; then
-            git add issues/
-            git add data/last_run.json || true
+            git add issues/ data/last_run.json || true
             git commit -m "Daily AI News — $(date -u +%Y-%m-%d)"
             git push
-            echo "Published new issue"
+            echo "published=true" >> $GITHUB_OUTPUT
+            echo "Published new markdown issue"
           else
+            echo "published=false" >> $GITHUB_OUTPUT
             echo "No new issue to publish today"
           fi
+
+      - name: Post daily summary as GitHub Issue (triggers email for watchers)
+        if: steps.commit.outputs.published == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            // Find the newest issue file
+            const issuesDir = 'issues';
+            const files = fs.readdirSync(issuesDir)
+              .filter(f => f.endsWith('.md'))
+              .sort()
+              .reverse();
+
+            if (files.length === 0) {
+              console.log('No issue files found');
+              return;
+            }
+
+            const latest = files[0];
+            const content = fs.readFileSync(path.join(issuesDir, latest), 'utf8');
+            const number = latest.replace('.md', '');
+
+            // Create a GitHub Issue so repository watchers receive email notifications
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `NEWS Daily Summary — Issue #${number}`,
+              body: content + '\n\n---\n*This issue was posted automatically so that people watching the repository receive an email notification. The canonical version lives in `/issues/`.*',
+              labels: ['daily-summary', 'auto']
+            });
+
+            console.log(`Created GitHub Issue for #${number}`);
