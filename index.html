@@ -62,13 +62,15 @@
     .nav-right { display: flex; gap: 0.7rem; align-items: center; }
     .btn {
       display: inline-flex; align-items: center; gap: 0.35rem;
-      padding: 0.5rem 1.05rem; border-radius: 999px;
-      font-weight: 600; font-size: 0.85rem;
+      padding: 0.55rem 1.15rem; border-radius: 999px;
+      font-weight: 600; font-size: 0.875rem;
       text-decoration: none; transition: all 0.15s;
       border: 1px solid transparent; cursor: pointer;
+      font-family: var(--font);
     }
     .btn-primary { background: var(--accent); color: #0a0a0b; }
     .btn-primary:hover { background: #67e8f9; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
     .btn-ghost { background: transparent; color: var(--text); border-color: var(--border); }
     .btn-ghost:hover { border-color: #3f3f46; background: var(--bg-elevated); }
 
@@ -136,30 +138,63 @@
     .feature h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.3rem; }
     .feature p { font-size: 0.85rem; color: var(--text-muted); }
 
+    /* Subscribe form */
     .subscribe-box {
       background: var(--bg-elevated); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.8rem 1.6rem;
+      border-radius: var(--radius); padding: 2rem 1.6rem;
       text-align: center;
     }
-    .subscribe-box h3 { font-size: 1.25rem; margin-bottom: 0.5rem; }
-    .subscribe-box p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.4rem; }
-    .subscribe-steps {
-      text-align: left; max-width: 420px; margin: 0 auto 1.5rem;
-      font-size: 0.9rem; color: var(--text-muted);
-    }
-    .subscribe-steps li { margin-bottom: 0.45rem; }
-    .subscribe-steps code {
-      background: var(--bg-card); padding: 0.15rem 0.4rem;
-      border-radius: 4px; font-family: var(--mono); font-size: 0.82rem;
-    }
+    .subscribe-box h3 { font-size: 1.3rem; margin-bottom: 0.4rem; }
+    .subscribe-box > p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
 
-    .json-note {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 10px; padding: 1rem 1.2rem;
-      font-family: var(--mono); font-size: 0.8rem;
-      color: var(--text-dim); margin-top: 1.2rem;
-      text-align: left;
+    .form-row {
+      display: flex;
+      gap: 0.6rem;
+      max-width: 420px;
+      margin: 0 auto 0.9rem;
     }
+    @media (max-width: 480px) {
+      .form-row { flex-direction: column; }
+    }
+    .form-row input {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.75rem 1.15rem;
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-row input:focus { border-color: var(--accent); }
+    .form-row input::placeholder { color: var(--text-dim); }
+    .form-row .btn { white-space: nowrap; padding: 0.75rem 1.3rem; }
+
+    .form-note {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      max-width: 400px;
+      margin: 0 auto;
+      line-height: 1.45;
+    }
+    .form-note strong { color: var(--text-muted); }
+
+    .success-msg {
+      display: none;
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      color: var(--green);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .success-msg.show { display: block; }
 
     footer {
       border-top: 1px solid var(--border);
@@ -177,7 +212,7 @@
       <a href="./" class="logo">NEWS <span>·</span> AI</a>
       <div class="nav-right">
         <a href="https://github.com/ram133/NEWS" class="btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://github.com/ram133/NEWS/issues/new?title=Subscribe&body=Email%3A%20%0A%0A(please%20include%20your%20email%20address)" class="btn btn-primary" target="_blank" rel="noopener">Subscribe Free</a>
+        <a href="#subscribe" class="btn btn-primary">Subscribe Free</a>
       </div>
     </div>
   </nav>
@@ -188,7 +223,7 @@
       <h1>High-signal AI news.<br />Nothing else.</h1>
       <p>Short, curated updates on the developments that actually matter. Built with pure GitHub + JSON. No external services.</p>
       <div class="hero-cta">
-        <a href="https://github.com/ram133/NEWS/issues/new?title=Subscribe&body=Email%3A%20%0A%0A(please%20include%20your%20email%20address)" class="btn btn-primary" target="_blank" rel="noopener">Subscribe Free →</a>
+        <a href="#subscribe" class="btn btn-primary">Subscribe Free →</a>
         <a href="#latest" class="btn btn-ghost">Read latest issue</a>
       </div>
     </div>
@@ -233,24 +268,32 @@
     </div>
   </section>
 
-  <section>
+  <section id="subscribe">
     <div class="container">
       <div class="subscribe-box">
         <h3>Subscribe free</h3>
-        <p>One GitHub Issue is all it takes. No forms. No external databases.</p>
-        <ol class="subscribe-steps">
-          <li>Open a new issue with the title <code>Subscribe</code></li>
-          <li>Put your email address in the body</li>
-          <li>Your email is added to <code>data/subscribers.json</code></li>
-        </ol>
-        <a href="https://github.com/ram133/NEWS/issues/new?title=Subscribe&body=Email%3A%20%0A%0A(please%20include%20your%20email%20address)" class="btn btn-primary" target="_blank" rel="noopener">Open Subscribe Issue →</a>
+        <p>Enter your email. We’ll open a short GitHub form already filled for you — no extra typing.</p>
 
-        <div class="json-note">
-          {
-  "description": "Email subscriptions…",
-  "updated": "2026-10-29",
-  "subscribers": [ … ]
-}
+        <form id="subscribeForm" class="form-row">
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="you@example.com"
+            required
+            autocomplete="email"
+            inputmode="email"
+          />
+          <button type="submit" class="btn btn-primary" id="submitBtn">Subscribe</button>
+        </form>
+
+        <p class="form-note">
+          This uses <strong>GitHub only</strong>. Your email is stored in a public JSON file in this repository.
+          No external services. You can unsubscribe anytime by opening another issue.
+        </p>
+
+        <div class="success-msg" id="successMsg">
+          Opening GitHub… Just click “Submit new issue” on the next page. That’s it.
         </div>
       </div>
     </div>
@@ -262,5 +305,46 @@
       <p style="margin-top:0.4rem">Built with <a href="https://x.ai" target="_blank" rel="noopener">Grok</a> · <a href="https://github.com/ram133/NEWS" target="_blank" rel="noopener">GitHub</a> · MIT</p>
     </div>
   </footer>
+
+  <script>
+    const form = document.getElementById('subscribeForm');
+    const emailInput = document.getElementById('email');
+    const submitBtn = document.getElementById('submitBtn');
+    const successMsg = document.getElementById('successMsg');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const email = emailInput.value.trim();
+      if (!email || !email.includes('@')) {
+        emailInput.focus();
+        return;
+      }
+
+      // Build a clean pre-filled GitHub Issue
+      const title = encodeURIComponent('Subscribe');
+      const body = encodeURIComponent(
+        'Email: ' + email + '\n\n' +
+        '---\n' +
+        'Please add this email to data/subscribers.json.\n' +
+        'I understand my email will be stored in a public JSON file in this repository.'
+      );
+
+      const url = 'https://github.com/ram133/NEWS/issues/new?title=' + title + '&body=' + body;
+
+      successMsg.classList.add('show');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Opening…';
+
+      // Open the pre-filled issue
+      window.open(url, '_blank', 'noopener');
+
+      // Reset after a moment
+      setTimeout(() => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Subscribe';
+        emailInput.value = '';
+      }, 2500);
+    });
+  </script>
 </body>
 </html>
