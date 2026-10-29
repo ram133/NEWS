@@ -1,113 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ram133 · All Repositories</title>
-<style>
-body{font-family:system-ui,sans-serif;background:#0d1117;color:#e6edf3;margin:0;padding:1.5rem;line-height:1.4}
-.container{max-width:800px;margin:0 auto}
-h1{font-size:1.5rem;margin-bottom:.3rem}
-h1 a{color:#58a6ff;text-decoration:none}
-.sub{color:#8b949e;font-size:.9rem;margin-bottom:1.2rem}
-.count{display:inline-block;background:#161b22;border:1px solid #30363d;border-radius:999px;padding:.2rem .8rem;font-size:.8rem;color:#8b949e}
-ul{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.4rem;margin-top:1.2rem}
-li a{display:block;background:#161b22;border:1px solid #30363d;border-radius:6px;padding:.5rem .7rem;color:#58a6ff;text-decoration:none;font-size:.9rem}
-li a:hover{border-color:#58a6ff}
-footer{margin-top:2rem;font-size:.8rem;color:#8b949e;border-top:1px solid #30363d;padding-top:1rem}
-footer a{color:#58a6ff}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEWS — Free AI News Newsletter</title>
+  <meta name="description" content="High-signal AI news. Forever free. No spam. No paywall. Powered by pure GitHub + JSON." />
+  <meta name="theme-color" content="#0a0a0b" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0b;
+      --bg-elevated: #111113;
+      --bg-card: #161618;
+      --border: #27272a;
+      --text: #fafafa;
+      --text-muted: #a1a1aa;
+      --text-dim: #71717a;
+      --accent: #22d3ee;
+      --accent-soft: rgba(34, 211, 238, 0.12);
+      --green: #34d399;
+      --radius: 14px;
+      --font: 'Inter', system-ui, -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        radial-gradient(ellipse 70% 40% at 50% -10%, rgba(34,211,238,0.07), transparent),
+        linear-gradient(rgba(34,211,238,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34,211,238,0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 56px 56px, 56px 56px;
+      pointer-events: none; z-index: 0;
+    }
+    .container { max-width: 720px; margin: 0 auto; padding: 0 1.4rem; position: relative; z-index: 1; }
+
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(16px);
+      background: rgba(10,10,11,0.85);
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 0;
+    }
+    nav .inner { display: flex; align-items: center; justify-content: space-between; }
+    .logo {
+      font-weight: 800; font-size: 1.25rem; letter-spacing: -0.03em;
+      color: var(--text); text-decoration: none;
+    }
+    .logo span { color: var(--accent); }
+    .nav-right { display: flex; gap: 0.7rem; align-items: center; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.5rem 1.05rem; border-radius: 999px;
+      font-weight: 600; font-size: 0.85rem;
+      text-decoration: none; transition: all 0.15s;
+      border: 1px solid transparent; cursor: pointer;
+    }
+    .btn-primary { background: var(--accent); color: #0a0a0b; }
+    .btn-primary:hover { background: #67e8f9; transform: translateY(-1px); }
+    .btn-ghost { background: transparent; color: var(--text); border-color: var(--border); }
+    .btn-ghost:hover { border-color: #3f3f46; background: var(--bg-elevated); }
+
+    .hero { padding: 4.5rem 0 3rem; text-align: center; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--accent-soft); border: 1px solid rgba(34,211,238,0.25);
+      color: var(--accent); font-size: 0.75rem; font-weight: 600;
+      padding: 0.3rem 0.8rem; border-radius: 999px; margin-bottom: 1.3rem;
+    }
+    .badge::before {
+      content: ''; width: 6px; height: 6px; background: var(--accent);
+      border-radius: 50%; animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+    h1 {
+      font-size: clamp(2.1rem, 5.5vw, 3rem);
+      font-weight: 800; letter-spacing: -0.04em; line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      color: var(--text-muted); font-size: 1.1rem;
+      max-width: 480px; margin: 0 auto 2rem; line-height: 1.6;
+    }
+    .hero-cta { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+
+    section { padding: 3.2rem 0; }
+    .section-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem;
+    }
+    h2 {
+      font-size: 1.55rem; font-weight: 800; letter-spacing: -0.03em;
+      margin-bottom: 0.7rem;
+    }
+    .section-desc { color: var(--text-muted); font-size: 0.98rem; margin-bottom: 1.8rem; }
+
+    .issue-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.4rem 1.5rem;
+      transition: border-color 0.2s;
+    }
+    .issue-card:hover { border-color: #3f3f46; }
+    .issue-meta {
+      font-size: 0.78rem; color: var(--text-dim);
+      margin-bottom: 0.5rem; font-family: var(--mono);
+    }
+    .issue-card h3 {
+      font-size: 1.15rem; font-weight: 700; margin-bottom: 0.45rem;
+    }
+    .issue-card p { color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1rem; }
+    .issue-card a {
+      color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.9rem;
+    }
+    .issue-card a:hover { text-decoration: underline; }
+
+    .features {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    }
+    @media (max-width: 520px) { .features { grid-template-columns: 1fr; } }
+    .feature {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.15rem;
+    }
+    .feature h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .feature p { font-size: 0.85rem; color: var(--text-muted); }
+
+    .subscribe-box {
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.8rem 1.6rem;
+      text-align: center;
+    }
+    .subscribe-box h3 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+    .subscribe-box p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.4rem; }
+    .subscribe-steps {
+      text-align: left; max-width: 420px; margin: 0 auto 1.5rem;
+      font-size: 0.9rem; color: var(--text-muted);
+    }
+    .subscribe-steps li { margin-bottom: 0.45rem; }
+    .subscribe-steps code {
+      background: var(--bg-card); padding: 0.15rem 0.4rem;
+      border-radius: 4px; font-family: var(--mono); font-size: 0.82rem;
+    }
+
+    .json-note {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1rem 1.2rem;
+      font-family: var(--mono); font-size: 0.8rem;
+      color: var(--text-dim); margin-top: 1.2rem;
+      text-align: left;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+      color: var(--text-dim); font-size: 0.85rem;
+      text-align: center;
+    }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+  </style>
 </head>
 <body>
-<div class="container">
-<header>
-<h1><a href="https://github.com/ram133">ram133</a> · Repository Index</h1>
-<p class="sub">Clifford Ray Hackett · Guam, USA</p>
-<span class="count">78 repositories</span>
-</header>
-<ul>
-      <li><a href="https://github.com/ram133/.github">.github</a></li>
-      <li><a href="https://github.com/ram133/2509">2509</a></li>
-      <li><a href="https://github.com/ram133/5">5</a></li>
-      <li><a href="https://github.com/ram133/ADA">ADA</a></li>
-      <li><a href="https://github.com/ram133/AI">AI</a></li>
-      <li><a href="https://github.com/ram133/AutoGPT">AutoGPT</a></li>
-      <li><a href="https://github.com/ram133/ChatGPT">ChatGPT</a></li>
-      <li><a href="https://github.com/ram133/DOCOMO">DOCOMO</a></li>
-      <li><a href="https://github.com/ram133/GROK">GROK</a></li>
-      <li><a href="https://github.com/ram133/Gemini">Gemini</a></li>
-      <li><a href="https://github.com/ram133/How-to-Make-a-Computer-Operating-System">How-to-Make-a-Computer-Operating-System</a></li>
-      <li><a href="https://github.com/ram133/MAX">MAX</a></li>
-      <li><a href="https://github.com/ram133/NEWS">NEWS</a></li>
-      <li><a href="https://github.com/ram133/PHP-Download-Counter">PHP-Download-Counter</a></li>
-      <li><a href="https://github.com/ram133/Qwen">Qwen</a></li>
-      <li><a href="https://github.com/ram133/Qwen3.8">Qwen3.8</a></li>
-      <li><a href="https://github.com/ram133/Scweet">Scweet</a></li>
-      <li><a href="https://github.com/ram133/XActions">XActions</a></li>
-      <li><a href="https://github.com/ram133/agent">agent</a></li>
-      <li><a href="https://github.com/ram133/agentdb">agentdb</a></li>
-      <li><a href="https://github.com/ram133/api">api</a></li>
-      <li><a href="https://github.com/ram133/api-vault">api-vault</a></li>
-      <li><a href="https://github.com/ram133/apps-script-samples">apps-script-samples</a></li>
-      <li><a href="https://github.com/ram133/asset-store">asset-store</a></li>
-      <li><a href="https://github.com/ram133/audio-presets">audio-presets</a></li>
-      <li><a href="https://github.com/ram133/bot2">bot2</a></li>
-      <li><a href="https://github.com/ram133/bot3">bot3</a></li>
-      <li><a href="https://github.com/ram133/browser-use">browser-use</a></li>
-      <li><a href="https://github.com/ram133/cli">cli</a></li>
-      <li><a href="https://github.com/ram133/code-boilerplates">code-boilerplates</a></li>
-      <li><a href="https://github.com/ram133/coin">coin</a></li>
-      <li><a href="https://github.com/ram133/coin2">coin2</a></li>
-      <li><a href="https://github.com/ram133/coin3">coin3</a></li>
-      <li><a href="https://github.com/ram133/coin4">coin4</a></li>
-      <li><a href="https://github.com/ram133/coin5">coin5</a></li>
-      <li><a href="https://github.com/ram133/cross-post-automation">cross-post-automation</a></li>
-      <li><a href="https://github.com/ram133/design-assets">design-assets</a></li>
-      <li><a href="https://github.com/ram133/devitils">devitils</a></li>
-      <li><a href="https://github.com/ram133/digital_factory">digital_factory</a></li>
-      <li><a href="https://github.com/ram133/eliza">eliza</a></li>
-      <li><a href="https://github.com/ram133/everything-claude-code">everything-claude-code</a></li>
-      <li><a href="https://github.com/ram133/fastgpt-cloud">fastgpt-cloud</a></li>
-      <li><a href="https://github.com/ram133/femtoclaw">femtoclaw</a></li>
-      <li><a href="https://github.com/ram133/gas-microsaas">gas-microsaas</a></li>
-      <li><a href="https://github.com/ram133/guamcoin">guamcoin</a></li>
-      <li><a href="https://github.com/ram133/gyd">gyd</a></li>
-      <li><a href="https://github.com/ram133/jFeed">jFeed</a></li>
-      <li><a href="https://github.com/ram133/jsonframe-cheerio">jsonframe-cheerio</a></li>
-      <li><a href="https://github.com/ram133/langchain">langchain</a></li>
-      <li><a href="https://github.com/ram133/max-git-system">max-git-system</a></li>
-      <li><a href="https://github.com/ram133/mcu_quantum_project">mcu_quantum_project</a></li>
-      <li><a href="https://github.com/ram133/micro-saas-kit">micro-saas-kit</a></li>
-      <li><a href="https://github.com/ram133/nanoGPT">nanoGPT</a></li>
-      <li><a href="https://github.com/ram133/niche-directory">niche-directory</a></li>
-      <li><a href="https://github.com/ram133/nocodb-cloud">nocodb-cloud</a></li>
-      <li><a href="https://github.com/ram133/oh-my-cli">oh-my-cli</a></li>
-      <li><a href="https://github.com/ram133/ollama">ollama</a></li>
-      <li><a href="https://github.com/ram133/open-webui-cloud">open-webui-cloud</a></li>
-      <li><a href="https://github.com/ram133/openclaw">openclaw</a></li>
-      <li><a href="https://github.com/ram133/picoclaw">picoclaw</a></li>
-      <li><a href="https://github.com/ram133/prompt-pack">prompt-pack</a></li>
-      <li><a href="https://github.com/ram133/qwen-code-action">qwen-code-action</a></li>
-      <li><a href="https://github.com/ram133/ram133">ram133</a></li>
-      <li><a href="https://github.com/ram133/raycoin">raycoin</a></li>
-      <li><a href="https://github.com/ram133/rayswallet">rayswallet</a></li>
-      <li><a href="https://github.com/ram133/simple-ipn">simple-ipn</a></li>
-      <li><a href="https://github.com/ram133/site-api">site-api</a></li>
-      <li><a href="https://github.com/ram133/site-assets">site-assets</a></li>
-      <li><a href="https://github.com/ram133/site-core">site-core</a></li>
-      <li><a href="https://github.com/ram133/site-ui">site-ui</a></li>
-      <li><a href="https://github.com/ram133/site-utils">site-utils</a></li>
-      <li><a href="https://github.com/ram133/stable-diffusion-webui">stable-diffusion-webui</a></li>
-      <li><a href="https://github.com/ram133/supabase">supabase</a></li>
-      <li><a href="https://github.com/ram133/template-store">template-store</a></li>
-      <li><a href="https://github.com/ram133/twikit">twikit</a></li>
-      <li><a href="https://github.com/ram133/vuemmerce">vuemmerce</a></li>
-      <li><a href="https://github.com/ram133/web-llm-chat">web-llm-chat</a></li>
-      <li><a href="https://github.com/ram133/x-tweet-scraper">x-tweet-scraper</a></li>
-</ul>
-<footer>
-Updated 2026-10-29 · <a href="https://github.com/ram133/MAX">Canonical index in MAX</a>
-</footer>
-</div>
+  <nav>
+    <div class="container inner">
+      <a href="./" class="logo">NEWS <span>·</span> AI</a>
+      <div class="nav-right">
+        <a href="https://github.com/ram133/NEWS" class="btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/ram133/NEWS/issues/new?title=Subscribe&body=Email%3A%20%0A%0A(please%20include%20your%20email%20address)" class="btn btn-primary" target="_blank" rel="noopener">Subscribe Free</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <div class="badge">Forever free · No spam · No paywall</div>
+      <h1>High-signal AI news.<br />Nothing else.</h1>
+      <p>Short, curated updates on the developments that actually matter. Built with pure GitHub + JSON. No external services.</p>
+      <div class="hero-cta">
+        <a href="https://github.com/ram133/NEWS/issues/new?title=Subscribe&body=Email%3A%20%0A%0A(please%20include%20your%20email%20address)" class="btn btn-primary" target="_blank" rel="noopener">Subscribe Free →</a>
+        <a href="#latest" class="btn btn-ghost">Read latest issue</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="latest">
+    <div class="container">
+      <div class="section-label">Latest issue</div>
+      <h2>Issue #001 — October 27, 2026</h2>
+      <div class="issue-card">
+        <div class="issue-meta">Published · 4 top stories + quick hits</div>
+        <h3>Anthropic S-1, GPT-6.1 Terra price cut, security concerns & compute financing</h3>
+        <p>Anthropic’s landmark S-1 filing, OpenAI’s aggressive mid-size model pricing, rising security/trust questions, and the continuing capital intensity of the industry.</p>
+        <a href="https://github.com/ram133/NEWS/blob/main/issues/001.md" target="_blank" rel="noopener">Read full issue →</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-label">Why this exists</div>
+      <h2>Clean by design</h2>
+      <p class="section-desc">Most AI newsletters are either too noisy or behind a paywall. NEWS is neither.</p>
+      <div class="features">
+        <div class="feature">
+          <h4>High-signal only</h4>
+          <p>Short updates focused on real developments that move the industry.</p>
+        </div>
+        <div class="feature">
+          <h4>Forever free</h4>
+          <p>No premium tiers. No trials. Supported only by relevant product ads.</p>
+        </div>
+        <div class="feature">
+          <h4>Pure GitHub + JSON</h4>
+          <p>Subscribers live in a simple JSON file. No third-party email services.</p>
+        </div>
+        <div class="feature">
+          <h4>Automatic updates</h4>
+          <p>Issues are published in the repo. You can watch the repo or subscribe by email.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="subscribe-box">
+        <h3>Subscribe free</h3>
+        <p>One GitHub Issue is all it takes. No forms. No external databases.</p>
+        <ol class="subscribe-steps">
+          <li>Open a new issue with the title <code>Subscribe</code></li>
+          <li>Put your email address in the body</li>
+          <li>Your email is added to <code>data/subscribers.json</code></li>
+        </ol>
+        <a href="https://github.com/ram133/NEWS/issues/new?title=Subscribe&body=Email%3A%20%0A%0A(please%20include%20your%20email%20address)" class="btn btn-primary" target="_blank" rel="noopener">Open Subscribe Issue →</a>
+
+        <div class="json-note">
+          {
+  "description": "Email subscriptions…",
+  "updated": "2026-10-29",
+  "subscribers": [ … ]
+}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p><strong style="color:var(--text)">NEWS</strong> · Free AI News Newsletter</p>
+      <p style="margin-top:0.4rem">Built with <a href="https://x.ai" target="_blank" rel="noopener">Grok</a> · <a href="https://github.com/ram133/NEWS" target="_blank" rel="noopener">GitHub</a> · MIT</p>
+    </div>
+  </footer>
 </body>
 </html>
