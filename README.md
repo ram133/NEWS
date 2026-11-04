@@ -70,6 +70,45 @@ Only your email address is stored. You can unsubscribe anytime.
 
 ---
 
+## Import emails (bulk)
+
+You can import multiple email addresses into `data/subscribers.json` for free.
+
+### Method 1 — Pending file (easiest for bulk)
+
+1. Edit `data/pending_import.txt`
+2. Add one email per line (lines starting with `#` are ignored)
+3. Commit and push
+4. Go to **Actions** → **Import Subscribers** → **Run workflow**
+
+The Action will process the file, add valid new emails, and clear the pending file.
+
+### Method 2 — Direct in the Action
+
+1. Go to **Actions** → **Import Subscribers** → **Run workflow**
+2. Paste emails (one per line) into the `emails` input box
+3. Run
+
+### Method 3 — Local script
+
+```bash
+# From a text file (one email per line)
+python scripts/import_subscribers.py emails.txt
+
+# From a CSV (first column = email)
+python scripts/import_subscribers.py emails.csv --csv
+
+# Direct list
+python scripts/import_subscribers.py --emails user1@example.com user2@example.com
+
+# Dry-run (preview only)
+python scripts/import_subscribers.py emails.txt --dry-run
+```
+
+The script validates format, deduplicates (case-insensitive), and preserves existing subscribers.
+
+---
+
 ## Advertisement policy
 
 - Only relevant AI / developer / productivity tools
@@ -87,13 +126,15 @@ This keeps the newsletter free for readers while remaining sustainable.
 NEWS/
 ├── .github/workflows/
 │   ├── daily-news.yml         # Runs every day at 6 AM ChST
-│   └── import-subscribers.yml
+│   └── import-subscribers.yml # Bulk email import
 ├── data/
 │   ├── subscribers.json       # JSON database of email subscriptions
+│   ├── pending_import.txt     # Drop emails here for bulk import
 │   └── last_run.json          # Tracks last auto-publish
 ├── issues/                    # Published newsletter issues
 ├── scripts/
-│   └── generate_daily_issue.py
+│   ├── generate_daily_issue.py
+│   └── import_subscribers.py
 ├── index.html                 # Live site
 └── README.md
 ```
