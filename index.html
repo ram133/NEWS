@@ -163,8 +163,8 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 1.4rem 1.2rem;
-      max-width: 460px;
-      margin: 0 auto;
+      max-width: 480px;
+      margin: 0 auto 1.4rem;
     }
     .email-block h4 {
       font-size: 1rem;
@@ -205,6 +205,37 @@
       font-size: 0.78rem; color: var(--text-dim);
       max-width: 400px; margin: 0.9rem auto 0; line-height: 1.45;
     }
+
+    textarea {
+      width: 100%;
+      min-height: 110px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      outline: none;
+      resize: vertical;
+      margin-bottom: 0.9rem;
+      line-height: 1.5;
+    }
+    textarea:focus { border-color: var(--accent); }
+    textarea::placeholder { color: var(--text-dim); }
+
+    .import-btn {
+      background: var(--accent);
+      color: #0a0a0b;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-family: var(--font);
+    }
+    .import-btn:hover { background: #67e8f9; }
 
     footer {
       border-top: 1px solid var(--border);
@@ -303,9 +334,10 @@
 
         <div class="divider">or by email</div>
 
+        <!-- Single email subscribe -->
         <div class="email-block">
           <h4>Email subscribe</h4>
-          <p>Enter your email. We’ll add it to the free subscriber list stored in this repo.</p>
+          <p>Enter one email. We’ll add it to the free subscriber list stored in this repo.</p>
 
           <form id="subscribeForm" class="form-row">
             <input
@@ -325,6 +357,21 @@
             Your email is stored only in this repository’s public JSON file.
           </p>
         </div>
+
+        <!-- Multi-email import UI -->
+        <div class="email-block">
+          <h4>Import multiple emails</h4>
+          <p>Paste one email per line. Useful for bulk adds.</p>
+
+          <textarea id="importEmails" placeholder="user1@example.com&#10;user2@example.com&#10;user3@example.com"></textarea>
+
+          <button type="button" class="import-btn" id="importBtn">Import Emails</button>
+
+          <p class="form-note">
+            Opens a pre-filled GitHub Issue with the list.<br>
+            The list can then be processed by the Import Subscribers Action.
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -337,6 +384,7 @@
   </footer>
 
   <script>
+    // Single email subscribe
     document.getElementById('subscribeForm').addEventListener('submit', function (e) {
       e.preventDefault();
       const email = document.getElementById('email').value.trim();
@@ -351,6 +399,40 @@
         '---\n' +
         'Please add this email to data/subscribers.json.\n' +
         'I understand my email will be stored in a public JSON file in this repository.'
+      );
+
+      window.open(
+        'https://github.com/ram133/NEWS/issues/new?title=' + title + '&body=' + body,
+        '_blank',
+        'noopener'
+      );
+    });
+
+    // Multi-email import
+    document.getElementById('importBtn').addEventListener('click', function () {
+      const raw = document.getElementById('importEmails').value.trim();
+      if (!raw) {
+        document.getElementById('importEmails').focus();
+        return;
+      }
+
+      // Clean lines
+      const lines = raw.split(/\r?\n/)
+        .map(l => l.trim())
+        .filter(l => l && !l.startsWith('#') && l.includes('@'));
+
+      if (lines.length === 0) {
+        alert('No valid emails found. Please enter one email per line.');
+        return;
+      }
+
+      const title = encodeURIComponent('Import Subscribers');
+      const body = encodeURIComponent(
+        'Please import the following emails into data/subscribers.json:\n\n' +
+        lines.join('\n') +
+        '\n\n---\n' +
+        'These emails should be validated, deduplicated, and added to the subscriber list.\n' +
+        'This request was submitted via the website import form.'
       );
 
       window.open(
