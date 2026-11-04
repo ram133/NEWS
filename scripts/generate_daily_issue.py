@@ -22,10 +22,17 @@ ISSUES_DIR = ROOT / "issues"
 DATA_DIR = ROOT / "data"
 LAST_RUN_FILE = DATA_DIR / "last_run.json"
 
+# Tighter, more recent-focused HN query
 SOURCES = [
     {
         "name": "Hacker News (AI)",
-        "url": "https://hn.algolia.com/api/v1/search_by_date?query=AI%20OR%20LLM%20OR%20GPT%20OR%20Claude%20OR%20Grok&tags=story&hitsPerPage=10",
+        "url": (
+            "https://hn.algolia.com/api/v1/search_by_date"
+            "?query=AI%20OR%20LLM%20OR%20GPT%20OR%20Claude%20OR%20Grok%20OR%20OpenAI%20OR%20Anthropic%20OR%20Gemini"
+            "&tags=story"
+            "&hitsPerPage=25"
+            "&numericFilters=points>15"
+        ),
         "type": "hn",
     },
 ]
@@ -51,12 +58,20 @@ def next_issue_number() -> int:
 
 def fetch_json(url: str):
     try:
-        req = Request(url, headers={"User-Agent": "NEWS-Bot/1.0 (GitHub Actions)"})
-        with urlopen(req, timeout=20) as resp:
+        req = Request(url, headers={"User-Agent": "NEWS-Bot/1.1 (GitHub Actions)"})
+        with urlopen(req, timeout=25) as resp:
             return json.loads(resp.read().decode("utf-8"))
     except (URLError, HTTPError, TimeoutError, json.JSONDecodeError) as e:
         print(f"Fetch failed: {e}")
         return None
+
+
+def is_recent(created_at_i: int | None, max_age_hours: int = 48) -> bool:
+    """Keep only stories from the last N hours."""
+    if not created_at_i:
+        return False
+    age = utc_now().timestamp() - created_at_i
+    return age <= max_age_hours * 3600
 
 
 def collect_stories() -> list[dict]:
@@ -70,17 +85,21 @@ def collect_stories() -> list[dict]:
                 title = (hit.get("title") or "").strip()
                 url = hit.get("url") or f"https://news.ycombinator.com/item?id={hit.get('objectID')}"
                 points = hit.get("points") or 0
-                if title and points >= 8:
+                created = hit.get("created_at_i")
+                # Require recent + minimum points
+                if title and points >= 20 and is_recent(created, max_age_hours=60):
                     stories.append({
                         "title": title,
                         "url": url,
                         "points": points,
                         "source": src["name"],
+                        "created_at_i": created,
                     })
+    # Deduplicate by title prefix
     seen = set()
     unique = []
     for s in stories:
-        key = s["title"].lower()[:55]
+        key = s["title"].lower()[:60]
         if key not in seen:
             seen.add(key)
             unique.append(s)
@@ -155,7 +174,7 @@ def main() -> None:
         return
 
     stories = collect_stories()
-    print(f"Collected {len(stories)} stories")
+    print(f"Collected {len(stories)} recent high-signal stories")
 
     number = next_issue_number()
     content = render_issue(number, stories, date_str)

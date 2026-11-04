@@ -15,10 +15,10 @@ High-signal AI updates. Forever free. No spam. No paywall.
 
 ## Latest Issue
 
-**Issue #001 — October 27, 2026**  
-Anthropic S-1 filing, OpenAI GPT-6.1 Terra price cut, security concerns, and major compute financing.
+**Issue #008 — November 04, 2026**  
+ChatGPT search volume reaches ~20% of Google’s, AMD posts record AI-driven quarter, Anthropic open-sources FlashProve (model provenance), Google ties school Search access to AI tools.
 
-→ [Read Issue #001](issues/001.md)
+→ [Read Issue #008](issues/008.md)
 
 ---
 
