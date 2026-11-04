@@ -140,22 +140,41 @@
 
     .subscribe-box {
       background: var(--bg-elevated); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 2rem 1.6rem;
+      border-radius: var(--radius); padding: 2.2rem 1.6rem;
       text-align: center;
     }
-    .subscribe-box h3 { font-size: 1.3rem; margin-bottom: 0.4rem; }
-    .subscribe-box > p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.4rem; }
+    .subscribe-box h3 { font-size: 1.35rem; margin-bottom: 0.5rem; }
+    .subscribe-box > p { color: var(--text-muted); font-size: 0.98rem; margin-bottom: 1.6rem; }
 
-    .one-click { margin-bottom: 1.6rem; }
-    .one-click .btn { padding: 0.85rem 1.8rem; font-size: 1rem; }
-    .one-click-note { font-size: 0.8rem; color: var(--text-dim); margin-top: 0.7rem; }
+    .one-click { margin-bottom: 1.8rem; }
+    .one-click .btn { padding: 0.9rem 1.9rem; font-size: 1.05rem; }
+    .one-click-note { font-size: 0.8rem; color: var(--text-dim); margin-top: 0.75rem; }
 
     .divider {
       display: flex; align-items: center; gap: 1rem;
-      margin: 1.5rem 0; color: var(--text-dim); font-size: 0.8rem;
+      margin: 1.6rem 0; color: var(--text-dim); font-size: 0.8rem;
     }
     .divider::before, .divider::after {
       content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    .email-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem 1.2rem;
+      max-width: 460px;
+      margin: 0 auto;
+    }
+    .email-block h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+    .email-block p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
     }
 
     .form-row {
@@ -163,18 +182,28 @@
     }
     @media (max-width: 480px) { .form-row { flex-direction: column; } }
     .form-row input {
-      flex: 1; background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 999px; padding: 0.75rem 1.15rem; color: var(--text);
+      flex: 1; background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 999px; padding: 0.8rem 1.2rem; color: var(--text);
       font-family: var(--font); font-size: 0.95rem; outline: none;
       transition: border-color 0.15s;
     }
     .form-row input:focus { border-color: var(--accent); }
     .form-row input::placeholder { color: var(--text-dim); }
-    .form-row .btn { white-space: nowrap; padding: 0.75rem 1.3rem; }
+    .form-row .btn {
+      white-space: nowrap;
+      padding: 0.8rem 1.4rem;
+      background: var(--accent);
+      color: #0a0a0b;
+      border: none;
+    }
+    .form-row .btn:hover {
+      background: #67e8f9;
+    }
 
     .form-note {
       font-size: 0.78rem; color: var(--text-dim);
-      max-width: 400px; margin: 0 auto; line-height: 1.45;
+      max-width: 400px; margin: 0.9rem auto 0; line-height: 1.45;
     }
 
     footer {
@@ -263,33 +292,39 @@
     <div class="container">
       <div class="subscribe-box">
         <h3>Get new issues automatically</h3>
-        <p>One click. No email required.</p>
+        <p>Two free ways. No spam. No paywall.</p>
 
         <div class="one-click">
           <a href="https://github.com/ram133/NEWS/subscription" class="btn btn-primary" target="_blank" rel="noopener">
             Watch this repository →
           </a>
-          <p class="one-click-note">You’ll get a GitHub notification every time a new issue is published.</p>
+          <p class="one-click-note">Fastest option. You get a GitHub notification every time a new issue is published.</p>
         </div>
 
         <div class="divider">or by email</div>
 
-        <form id="subscribeForm" class="form-row">
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="you@example.com"
-            required
-            autocomplete="email"
-            inputmode="email"
-          />
-          <button type="submit" class="btn btn-ghost" id="submitBtn">Email me</button>
-        </form>
+        <div class="email-block">
+          <h4>Email subscribe</h4>
+          <p>Enter your email. We’ll add it to the free subscriber list stored in this repo.</p>
 
-        <p class="form-note">
-          Opens a pre-filled GitHub form. One more click to confirm. Your email is stored only in this repo’s JSON file.
-        </p>
+          <form id="subscribeForm" class="form-row">
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="you@example.com"
+              required
+              autocomplete="email"
+              inputmode="email"
+            />
+            <button type="submit" class="btn" id="submitBtn">Subscribe</button>
+          </form>
+
+          <p class="form-note">
+            Opens a pre-filled GitHub form. One more click to confirm.<br>
+            Your email is stored only in this repository’s public JSON file.
+          </p>
+        </div>
       </div>
     </div>
   </section>
