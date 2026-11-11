@@ -9,7 +9,8 @@ High-signal AI updates. Forever free. No spam. No paywall.
 > Curated AI news that actually matters — powered by pure GitHub + JSON.
 
 **Live site:** https://ram133.github.io/NEWS/  
-**Repo:** https://github.com/ram133/NEWS
+**Repo:** https://github.com/ram133/NEWS  
+**Free resources hub:** [start-here](https://github.com/ram133/start-here)
 
 ---
 
@@ -33,6 +34,8 @@ A clean, no-nonsense AI news newsletter.
 
 No paywalls. No premium tiers. No spam.
 
+This is the same system I use to stay current while building AI agents and automation for clients.
+
 ---
 
 ## Automatic publishing (6 AM ChST every day)
@@ -53,10 +56,6 @@ You can also trigger it manually from the **Actions** tab → **Daily AI News Pu
 
 This project uses **only GitHub**. No external form services, no third-party databases.
 
-Email subscriptions are stored in a simple JSON file that acts as the database:
-
-**`data/subscribers.json`**
-
 ### How to subscribe (easiest)
 
 **One click:** [Watch this repository](https://github.com/ram133/NEWS/subscription)  
@@ -70,59 +69,15 @@ Only your email address is stored. You can unsubscribe anytime.
 
 ---
 
-## Import emails (bulk)
+## Want help building with AI?
 
-You can import multiple email addresses into `data/subscribers.json` for free.
+When you’re ready for live 1-on-1 help with agents, automation, prompt systems, or shipping digital products:
 
-### Method 1 — Pending file (easiest for bulk)
-
-1. Edit `data/pending_import.txt`
-2. Add one email per line (lines starting with `#` are ignored)
-3. Commit and push
-4. Go to **Actions** → **Import Subscribers** → **Run workflow**
-
-The Action will process the file, add valid new emails, and clear the pending file.
-
-### Method 2 — Direct in the Action
-
-1. Go to **Actions** → **Import Subscribers** → **Run workflow**
-2. Paste emails (one per line) into the `emails` input box
-3. Run
-
-### Method 3 — Local script
-
-```bash
-# From a text file (one email per line)
-python scripts/import_subscribers.py emails.txt
-
-# From a CSV (first column = email)
-python scripts/import_subscribers.py emails.csv --csv
-
-# Direct list
-python scripts/import_subscribers.py --emails user1@example.com user2@example.com
-
-# Dry-run (preview only)
-python scripts/import_subscribers.py emails.txt --dry-run
-```
-
-The script validates format, deduplicates (case-insensitive), and preserves existing subscribers.
-
----
-
-## Advertisement policy
-
-- Only relevant AI / developer / productivity tools
-- Clearly labeled as advertisements
-- Never more than a small portion of the issue
-- We only accept products we would actually consider using ourselves
-
-This keeps the newsletter free for readers while remaining sustainable.
+→ **[services](https://github.com/ram133/services)** — $1 per minute. Pay only for the time we spend.
 
 ---
 
 ## Contact & Support
-
-**Want to advertise, collaborate, or support the free newsletter?**
 
 | Method | Details |
 |--------|---------|
@@ -136,33 +91,10 @@ All payments go directly to Ray.
 
 ---
 
-## Repository structure
-
-```
-NEWS/
-├── .github/workflows/
-│   ├── daily-news.yml         # Runs every day at 6 AM ChST
-│   └── import-subscribers.yml # Bulk email import
-├── data/
-│   ├── subscribers.json       # JSON database of email subscriptions
-│   ├── pending_import.txt     # Drop emails here for bulk import
-│   └── last_run.json          # Tracks last auto-publish
-├── issues/                    # Published newsletter issues
-├── scripts/
-│   ├── generate_daily_issue.py
-│   └── import_subscribers.py
-├── index.html                 # Live site
-└── README.md
-```
-
----
-
 ## Credits
 
 Built and maintained with **Grok** (xAI) as primary collaborator.
 
 This is an independent project — not affiliated with xAI.
-
----
 
 **Star this repo** if you want to follow the free AI newsletter from the beginning.
