@@ -120,6 +120,22 @@ This keeps the newsletter free for readers while remaining sustainable.
 
 ---
 
+## Contact & Support
+
+**Want to advertise, collaborate, or support the free newsletter?**
+
+| Method | Details |
+|--------|---------|
+| **Phone / Signal** | +1 (671) 685-9138 · +1 (671) 456-6963 |
+| **Email** | 3659745@gmail.com · crh2123@icloud.com |
+| **Website** | [ray.services](https://ray.services) |
+| **PayPal** | crh2123@icloud.com |
+| **Live sessions** | $1/min AI automation & prompt engineering |
+
+All payments go directly to Ray.
+
+---
+
 ## Repository structure
 
 ```
