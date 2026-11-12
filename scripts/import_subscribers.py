@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Import email subscribers into data/subscribers.json
+Import email subscribers into subscribers.json (repo root)
 
 Usage examples:
   # From a plain text file (one email per line)
@@ -20,7 +20,7 @@ The script:
   - Deduplicates (case-insensitive)
   - Preserves existing subscribers
   - Updates the "updated" timestamp
-  - Writes clean JSON back to data/subscribers.json
+  - Writes clean JSON back to subscribers.json at the repo root
 """
 
 import argparse
@@ -33,7 +33,7 @@ from pathlib import Path
 
 # Paths relative to repo root
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SUBSCRIBERS_FILE = REPO_ROOT / "data" / "subscribers.json"
+SUBSCRIBERS_FILE = REPO_ROOT / "subscribers.json"
 
 EMAIL_RE = re.compile(r"^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$")
 
@@ -90,7 +90,7 @@ def collect_from_file(path: Path, is_csv: bool) -> list[str]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Import emails into data/subscribers.json")
+    parser = argparse.ArgumentParser(description="Import emails into subscribers.json (repo root)")
     parser.add_argument("file", nargs="?", help="Text or CSV file containing emails")
     parser.add_argument("--csv", action="store_true", help="Treat input file as CSV (use first column)")
     parser.add_argument("--emails", nargs="+", help="Emails passed directly on the command line")

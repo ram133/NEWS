@@ -1,7 +1,10 @@
 {
+  "description": "Email subscriptions for the NEWS newsletter. Managed only within this GitHub repository. No external services.",
+  "updated": "2026-11-13",
   "subscribers": [
     "3659745@gmail.com",
     "crh2509@icloud.com",
+    "ray4senator@gmail.com",
     "smith@gmail.com",
     "johnson@gmail.com",
     "williams@gmail.com",
@@ -15,7 +18,6 @@
     "hernandez@gmail.com",
     "lopez@gmail.com",
     "gonzalez@gmail.com",
-    "ray4senator@gmail.com",
     "wilson@gmail.com"
   ]
 }

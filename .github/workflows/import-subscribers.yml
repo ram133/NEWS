@@ -74,7 +74,7 @@ jobs:
           python scripts/import_subscribers.py /tmp/import/emails.txt $DRY_FLAG
 
           # Detect whether the JSON actually changed
-          if git diff --quiet data/subscribers.json; then
+          if git diff --quiet subscribers.json; then
             echo "added=0" >> $GITHUB_OUTPUT
           else
             echo "added=1" >> $GITHUB_OUTPUT
@@ -86,7 +86,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add data/subscribers.json
+          git add subscribers.json
 
           # Optionally clear the pending file after successful import
           if [ -f data/pending_import.txt ]; then
